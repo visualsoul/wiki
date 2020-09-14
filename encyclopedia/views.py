@@ -26,15 +26,8 @@ def entry(request, title):
 
 
 def random_entry(request):
-    entries = util.list_entries()
-    if len(entries) > 0:
-        random.shuffle(entries)
-        title = entries.pop()
-        entry = util.get_entry(title)
-        if entry is not None:
-            html_data = md.convert(entry)
-            return render(request, "encyclopedia/entry.html", {
-                'title': title, 'html_data': html_data
-                })
+    entry = random.choice(util.list_entries())
+    if entry is not None:
+        return HttpResponseRedirect(reverse('entry', args=[entry]))
     return render(request, "encyclopedia/error.html")
 
