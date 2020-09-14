@@ -22,7 +22,29 @@ def entry(request, title):
         'title': title, 'html_data': html_data
         })
     else:
-        raise Http404(f"404 Error - Entry ({title}) doesn't exist!")
+        raise Http404(f"404 Error - Entry [{title}] doesn't exist!")
+
+
+def search(request):
+    entries = [x.lower() for x in util.list_entries()]
+    entry_list = []
+    q = None
+    if request.method == 'POST':
+        q = request.POST['q']
+        if q == "":
+            q = None
+        else:
+            if q.lower() in entries:
+                return HttpResponseRedirect(reverse('entry', args=[q]))
+            else:
+                for e in util.list_entries():
+                    if q.lower() in e.lower():
+                        entry_list.append(e)
+
+    return render(request, "encyclopedia/search_results.html", {
+        'q': q,
+        'entries': entry_list
+    })
 
 
 def random_entry(request):
