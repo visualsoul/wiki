@@ -1,11 +1,18 @@
 from django.shortcuts import render
 from django.urls import reverse
 from django.http import HttpResponseRedirect, Http404, HttpResponse
+from django import forms
 from . import util
 
 from markdown2 import Markdown
 import random
+
+
 md = Markdown()
+
+class CreateEntryForm(forms.Form):
+    entry_title = forms.CharField(widget=forms.TextInput(attrs={'class': "form-control"}))
+    entry_text = forms.CharField(widget=forms.Textarea(attrs={'class': "form-control"}))
 
 
 def index(request):
@@ -23,6 +30,31 @@ def entry(request, title):
         })
     else:
         raise Http404(f"404 Error - Entry [{title}] doesn't exist!")
+
+
+def create(request):
+    if request.method == 'POST':
+        form = CreateEntryForm(request.POST)
+        if form.is_valid():
+            entry_title = form.cleaned_data['entry_title']
+            entry_text = form.cleaned_data['entry_text']
+            util.save_entry(title=entry_title, content=entry_text)
+            return HttpResponseRedirect(reverse('entry', args=[entry_title]))
+    return render(request, "encyclopedia/create.html", {
+        'form': CreateEntryForm()
+    })
+
+def edit(request):
+    if request.method == 'POST':
+        title = request.POST['title']
+        entry = util.get_entry(title)
+        form = CreateEntryForm(request.POST)
+        form.entry_title = title
+        form.entry_text = entry
+        
+    return render(request, "encyclopedia/edit.html", {
+        'form': CreateEntryForm()
+    })
 
 
 def search(request):
