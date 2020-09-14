@@ -45,16 +45,19 @@ def create(request):
     })
 
 def edit(request):
-    if request.method == 'POST':
-        title = request.POST['title']
-        entry = util.get_entry(title)
+    if request.POST:
         form = CreateEntryForm(request.POST)
-        form.entry_title = title
-        form.entry_text = entry
-        
-    return render(request, "encyclopedia/edit.html", {
-        'form': CreateEntryForm()
-    })
+        if form.is_valid():
+            entry_title = form.cleaned_data['entry_title']
+            entry_text = form.cleaned_data['entry_text'].replace("\n", "")
+            util.save_entry(title=entry_title, content=entry_text)
+            return HttpResponseRedirect(reverse('entry', args=[entry_title]))
+    if request.GET:
+        title = request.GET['title']
+        entry = util.get_entry(title)
+        form = CreateEntryForm(initial={'entry_title': title, 'entry_text': entry})
+        return render(request, "encyclopedia/edit.html", { 'form':form, 'title': title })
+    
 
 
 def search(request):

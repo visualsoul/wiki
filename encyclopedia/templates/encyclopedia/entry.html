@@ -9,8 +9,8 @@
     <div class="container">
         {{ html_data|safe }}
         
-        <form action="{% url 'edit' %}" method="POST">
-            {% csrf_token %}
+        <form action="{% url 'edit' %}" method="GET">
+            
             <input type="hidden" name="title" value="{{ title }}">
             <input type="submit" class="btn btn-danger" value="Edit">
         </form>

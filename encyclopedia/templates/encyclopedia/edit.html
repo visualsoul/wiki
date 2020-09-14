@@ -9,7 +9,8 @@
     
     <div class="container">
         <h1>Edit Page</h1>
-    <form action="{% url 'create' %}" method="POST">
+        
+    <form action="{% url 'edit' %}" method="POST">
         {% csrf_token %}
         <div class="form-group">
         <label>Page Title</label>
@@ -18,7 +19,7 @@
         
         <div class="form-group">
         <label>Content</label>
-        {{ form.entry_text  }}
+        {{ form.entry_text }}
         </div>
 
         <div class="form-group">
