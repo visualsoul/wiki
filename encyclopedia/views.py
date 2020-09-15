@@ -29,7 +29,8 @@ def entry(request, title):
         'title': title, 'html_data': html_data
         })
     else:
-        raise Http404(f"404 Error - Entry [{title}] doesn't exist!")
+        return render(request, "encyclopedia/error.html")
+        # raise Http404(f"404 Error - Entry [{title}] doesn't exist!")
 
 
 def create(request):
