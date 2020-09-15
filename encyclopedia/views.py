@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.urls import reverse
-from django.http import HttpResponseRedirect, Http404
+from django.http import HttpResponseRedirect
 from django import forms
 from . import util
 
@@ -29,8 +29,8 @@ def entry(request, title):
         'title': title, 'html_data': html_data
         })
     else:
-        return render(request, "encyclopedia/error.html")
-        # raise Http404(f"404 Error - Entry [{title}] doesn't exist!")
+        message = "Page not found!"
+        return render(request, "encyclopedia/error.html", {'message': message})
 
 
 def create(request):
@@ -64,6 +64,8 @@ def edit(request):
         entry = util.get_entry(title)
         form = CreateEntryForm(initial={'entry_title': title, 'entry_text': entry})
         return render(request, "encyclopedia/edit.html", { 'form':form, 'title': title })
+    message = "Page not found! You need to specify the page you want to edit."
+    return render(request, "encyclopedia/error.html", {'message': message})
     
 
 def search(request):
