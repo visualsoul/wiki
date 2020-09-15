@@ -38,11 +38,17 @@ def create(request):
         if form.is_valid():
             entry_title = form.cleaned_data['entry_title']
             entry_text = form.cleaned_data['entry_text']
+            if entry_title.lower() in [x.lower() for x in util.list_entries()]:
+                for e in util.list_entries():
+                    if entry_title.lower() == e.lower():
+                        title = e
+                return render(request, 'encyclopedia/message.html', {'title': title})
             util.save_entry(title=entry_title, content=entry_text)
             return HttpResponseRedirect(reverse('entry', args=[entry_title]))
     return render(request, "encyclopedia/create.html", {
         'form': CreateEntryForm()
     })
+
 
 def edit(request):
     if request.POST:
@@ -58,7 +64,6 @@ def edit(request):
         form = CreateEntryForm(initial={'entry_title': title, 'entry_text': entry})
         return render(request, "encyclopedia/edit.html", { 'form':form, 'title': title })
     
-
 
 def search(request):
     entries = [x.lower() for x in util.list_entries()]
