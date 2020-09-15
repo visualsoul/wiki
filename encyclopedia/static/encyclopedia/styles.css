@@ -23,14 +23,20 @@ textarea {
 
 .search {
     width: 100%;
-    font-size: 15px;
-    line-height: 15px;
+    font-size: 16px;
+    line-height: 20px;
+    margin-bottom: 10px;
 }
 
 .sidebar {
-    background-color: #f0f0f0;
+    background-color: #2D3142;
     height: 100vh;
     padding: 20px;
+    color: azure;
+}
+
+.sidebar a {
+    color: azure;
 }
 
 .sidebar h2 {
