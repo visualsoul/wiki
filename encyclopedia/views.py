@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.urls import reverse
-from django.http import HttpResponseRedirect, Http404, HttpResponse
+from django.http import HttpResponseRedirect, Http404
 from django import forms
 from . import util
 
